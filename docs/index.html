@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riesgo Endocarditis</title>
+<style>
+:root{
+  --bg:#F6F7F9;
+  --surface:#FFFFFF;
+  --surface-2:#EEF1F5;
+  --ink:#15202E;
+  --muted:#5B6B80;
+  --border:#DCE2E9;
+  --primary:#0E6F6A;
+  --primary-dark:#0A4F4B;
+  --primary-ink:#FFFFFF;
+  --risk-high-bg:#FBEAEA;
+  --risk-high-ink:#9B1C1C;
+  --risk-high-border:#E7B4B4;
+  --risk-low-bg:#E9F5EE;
+  --risk-low-ink:#166534;
+  --risk-low-border:#B7E0C6;
+  --focus:#0E6F6A;
+  --shadow: 0 1px 2px rgba(21,32,46,.06), 0 8px 24px -12px rgba(21,32,46,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B141C;
+    --surface:#101C27;
+    --surface-2:#16232F;
+    --ink:#E8EDF3;
+    --muted:#93A6BA;
+    --border:#233242;
+    --primary:#2BB3AB;
+    --primary-dark:#1F8F89;
+    --primary-ink:#06211F;
+    --risk-high-bg:#2A1414;
+    --risk-high-ink:#F4A8A8;
+    --risk-high-border:#5A2222;
+    --risk-low-bg:#122A1C;
+    --risk-low-ink:#8FE0AC;
+    --risk-low-border:#204A31;
+    --focus:#2BB3AB;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B141C;
+  --surface:#101C27;
+  --surface-2:#16232F;
+  --ink:#E8EDF3;
+  --muted:#93A6BA;
+  --border:#233242;
+  --primary:#2BB3AB;
+  --primary-dark:#1F8F89;
+  --primary-ink:#06211F;
+  --risk-high-bg:#2A1414;
+  --risk-high-ink:#F4A8A8;
+  --risk-high-border:#5A2222;
+  --risk-low-bg:#122A1C;
+  --risk-low-ink:#8FE0AC;
+  --risk-low-border:#204A31;
+  --focus:#2BB3AB;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -12px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+html,body{background:var(--bg);}
+body{
+  color:var(--ink);
+  font-family:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding-inline:16px;
+  padding-block:32px;
+  max-width:1080px;
+  margin:0 auto;
+}
+h1,h2,h3{
+  font-family:"Source Serif 4", Georgia, "Times New Roman", serif;
+  line-height:1.15;
+  text-wrap:balance;
+  margin:0;
+}
+.mono, .pct, input, select{
+  font-variant-numeric: tabular-nums;
+}
+a{color:var(--primary);}
+
+header.top{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:28px;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--border);
+}
+.eyebrow{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11.5px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:var(--primary);
+  font-weight:600;
+}
+header.top h1{font-size:clamp(24px,4vw,32px); font-weight:600;}
+header.top p.sub{color:var(--muted); font-size:14.5px; max-width:62ch; margin:0;}
+
+.layout{
+  display:grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap:24px;
+  align-items:start;
+}
+@media (max-width: 780px){
+  .layout{grid-template-columns:1fr;}
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+}
+
+form.card{padding:24px;}
+
+fieldset{
+  border:none;
+  padding:0;
+  margin:0 0 22px 0;
+}
+fieldset:last-of-type{margin-bottom:0;}
+legend{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:0 0 10px 0;
+  width:100%;
+  border-bottom:1px solid var(--border);
+  margin-bottom:14px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px 16px;
+}
+@media (max-width:520px){
+  .grid2{grid-template-columns:1fr;}
+}
+
+.field{display:flex; flex-direction:column; gap:6px;}
+.field label{font-size:13px; font-weight:500; color:var(--ink);}
+.field .hint{font-size:11.5px; color:var(--muted);}
+
+input[type=number], select{
+  font-size:14.5px;
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:9px 10px;
+  width:100%;
+}
+select{appearance:none; background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 16px) center, calc(100% - 11px) center; background-size:5px 5px, 5px 5px; background-repeat:no-repeat; padding-right:30px;}
+input:focus, select:focus{outline:2px solid var(--focus); outline-offset:1px;}
+
+.yesno{display:flex; gap:8px;}
+.yesno button{
+  flex:1;
+  padding:8px 6px;
+  font-size:13.5px;
+  font-family:inherit;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--muted);
+  border-radius:8px;
+  cursor:pointer;
+}
+.yesno button[aria-pressed="true"]{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:var(--primary-ink);
+  font-weight:600;
+}
+.yesno button:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+
+.submit-row{
+  margin-top:24px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
+button.primary{
+  font-family:inherit;
+  font-size:15px;
+  font-weight:600;
+  color:var(--primary-ink);
+  background:var(--primary);
+  border:1px solid var(--primary-dark);
+  border-radius:9px;
+  padding:11px 22px;
+  cursor:pointer;
+}
+button.primary:hover{background:var(--primary-dark);}
+button.primary:disabled{opacity:.6; cursor:progress;}
+button.primary:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+.submit-note{font-size:12px; color:var(--muted);}
+
+.result-panel{
+  position:sticky;
+  top:16px;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.result-panel h2{font-size:17px; font-weight:600;}
+.result-empty{
+  color:var(--muted);
+  font-size:13.5px;
+  line-height:1.5;
+  padding:18px 0;
+}
+.result-empty .icon{font-size:22px; display:block; margin-bottom:8px;}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:14px;
+  width:fit-content;
+}
+.badge.high{background:var(--risk-high-bg); color:var(--risk-high-ink); border:1px solid var(--risk-high-border);}
+.badge.low{background:var(--risk-low-bg); color:var(--risk-low-ink); border:1px solid var(--risk-low-border);}
+.dot{width:8px; height:8px; border-radius:50%; background:currentColor;}
+
+.pct-block{display:flex; align-items:baseline; gap:6px;}
+.pct{font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:44px; font-weight:600; line-height:1;}
+.pct-label{color:var(--muted); font-size:13px;}
+
+.gauge{
+  height:8px;
+  border-radius:999px;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  overflow:hidden;
+  position:relative;
+}
+.gauge-fill{height:100%; border-radius:999px; transition:width .5s ease;}
+.gauge-fill.high{background:var(--risk-high-ink);}
+.gauge-fill.low{background:var(--risk-low-ink);}
+.gauge-threshold{
+  position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink); opacity:.35;
+}
+
+.disclaimer{
+  font-size:12px;
+  line-height:1.55;
+  color:var(--muted);
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+}
+.disclaimer strong{color:var(--ink);}
+
+.api-status{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.api-status .dot{background:var(--muted); width:6px; height:6px;}
+
+.error-box{
+  background:var(--risk-high-bg);
+  color:var(--risk-high-ink);
+  border:1px solid var(--risk-high-border);
+  border-radius:10px;
+  padding:12px 14px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer-note{
+  margin-top:28px;
+  padding-top:18px;
+  border-top:1px solid var(--border);
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+</head>
+<body>
+
+<header class="top">
+  <span class="eyebrow">Taller 2 &middot; Analisis de Datos I</span>
+  <h1>Riesgo exploratorio en endocarditis infecciosa</h1>
+  <p class="sub">Interfaz clinica-academica conectada a la API del pipeline entrenado (scikit-learn, regresion logistica con penalizacion elastic net). El porcentaje mostrado proviene de una llamada en vivo al modelo, no de una aproximacion escrita a mano.</p>
+</header>
+
+<div class="layout">
+  <form class="card" id="riskForm">
+
+    <fieldset>
+      <legend>Datos del paciente</legend>
+      <div class="grid2">
+        <div class="field">
+          <label for="edad">Edad (anos)</label>
+          <input type="number" id="edad" min="0" max="120" step="1" value="65" required>
+        </div>
+        <div class="field">
+          <label for="tipo">Tipo de endocarditis</label>
+          <select id="tipo" required>
+            <option value="Nativa">Nativa</option>
+            <option value="Protesica" selected>Protesica</option>
+            <option value="Asociada a cateter">Asociada a cateter</option>
+            <option value="Asociada a Dispositvo cardiaco">Asociada a dispositivo cardiaco</option>
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Antecedentes clinicos</legend>
+      <div class="grid2">
+        <div class="field">
+          <label>Falla cardiaca</label>
+          <div class="yesno" data-field="fallaCardiaca">
+            <button type="button" data-value="No" aria-pressed="true">No</button>
+            <button type="button" data-value="Si" aria-pressed="false">Si</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="renal">Enfermedad renal</label>
+          <select id="renal" required>
+            <option value="No">No</option>
+            <option value="Si, sin dialisis">Si, sin dialisis</option>
+            <option value="Si, con dialisis peritoneal">Si, con dialisis peritoneal</option>
+            <option value="Si, con hemodialisis" selected>Si, con hemodialisis</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="staph">Staphylococcus aureus</label>
+          <select id="staph" required>
+            <option value="No">No</option>
+            <option value="Si, meticilino sensible">Si, meticilino sensible</option>
+            <option value="Si, meticilino resistente" selected>Si, meticilino resistente</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Fiebre</label>
+          <div class="yesno" data-field="fiebre">
+            <button type="button" data-value="No" aria-pressed="false">No</button>
+            <button type="button" data-value="Si" aria-pressed="true">Si</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Sintomas neurologicos</label>
+          <div class="yesno" data-field="sintomasNeuro">
+            <button type="button" data-value="No" aria-pressed="false">No</button>
+            <button type="button" data-value="Si" aria-pressed="true">Si</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Aneurisma micotico</label>
+          <div class="yesno" data-field="aneurisma">
+            <button type="button" data-value="No" aria-pressed="true">No</button>
+            <button type="button" data-value="Si" aria-pressed="false">Si</button>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Laboratorios</legend>
+      <div class="grid2">
+        <div class="field">
+          <label for="neutrofilos">Neutrofilos (/uL)</label>
+          <input type="number" id="neutrofilos" min="0" step="1" value="8500" required>
+        </div>
+        <div class="field">
+          <label for="creatinina">Creatinina (mg/dL)</label>
+          <input type="number" id="creatinina" min="0" step="0.1" value="3.2" required>
+        </div>
+        <div class="field">
+          <label for="plaquetas">Plaquetas (/uL)</label>
+          <input type="number" id="plaquetas" min="0" step="1" value="90000" required>
+        </div>
+        <div class="field">
+          <label for="hemoglobina">Hemoglobina (g/dL)</label>
+          <input type="number" id="hemoglobina" min="0" step="0.1" value="9.5" required>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="submit-row">
+      <button type="submit" class="primary" id="submitBtn">Calcular riesgo exploratorio</button>
+      <span class="submit-note" id="submitNote">La API gratuita puede tardar ~50s en despertar si estuvo inactiva.</span>
+    </div>
+  </form>
+
+  <div class="card result-panel">
+    <h2>Resultado del modelo</h2>
+
+    <div id="resultEmpty" class="result-empty">
+      <span class="icon">&#8987;</span>
+      Complete el formulario y presione "Calcular riesgo exploratorio" para obtener la puntuacion real del pipeline entrenado.
+    </div>
+
+    <div id="resultBody" hidden>
+      <div id="badge" class="badge high" style="margin-bottom:16px;">
+        <span class="dot"></span>
+        <span id="badgeText">Riesgo elevado</span>
+      </div>
+
+      <div class="pct-block">
+        <span class="pct" id="pctValue">0.0</span>
+        <span class="pct-label">% puntuacion exploratoria</span>
+      </div>
+
+      <div class="gauge" style="margin-top:10px;">
+        <div class="gauge-fill high" id="gaugeFill" style="width:0%"></div>
+        <div class="gauge-threshold" id="gaugeThreshold" style="left:49%"></div>
+      </div>
+      <div class="submit-note" style="margin-top:4px;">Umbral de riesgo elevado: <span id="thresholdText" class="mono">49.0%</span></div>
+
+      <div class="disclaimer" style="margin-top:16px;">
+        <strong>Uso previsto:</strong> <span id="usoPrevisto">Exploratorio y academico; no usar para decisiones clinicas.</span><br><br>
+        <strong>Nota sobre el porcentaje:</strong> <span id="notaPorcentaje">Puntuacion de riesgo exploratoria; no representa una probabilidad absoluta de mortalidad calibrada.</span>
+      </div>
+    </div>
+
+    <div id="errorBox" class="error-box" hidden></div>
+
+    <div class="api-status">
+      <span class="dot"></span>
+      <span id="apiStatusText">API: riesgo-endocarditis-api.onrender.com</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  Modelo entrenado sobre una cohorte exploratoria de endocarditis infecciosa (Taller 2, Analisis de Datos I). El pipeline (imputacion, escalado, codificacion one-hot y regresion logistica elastic net) corre en un servicio backend propio; esta pagina solo envia los datos del formulario y muestra la respuesta del modelo. Ningun dato ingresado aqui se almacena.
+</div>
+
+<script>
+const API_URL = "https://riesgo-endocarditis-api.onrender.com/predict";
+
+const toggles = {};
+document.querySelectorAll('.yesno').forEach(group => {
+  const field = group.dataset.field;
+  toggles[field] = group.querySelector('button[aria-pressed="true"]').dataset.value;
+  group.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+      btn.setAttribute('aria-pressed', 'true');
+      toggles[field] = btn.dataset.value;
+    });
+  });
+});
+
+const form = document.getElementById('riskForm');
+const submitBtn = document.getElementById('submitBtn');
+const submitNote = document.getElementById('submitNote');
+const resultEmpty = document.getElementById('resultEmpty');
+const resultBody = document.getElementById('resultBody');
+const errorBox = document.getElementById('errorBox');
+const badge = document.getElementById('badge');
+const badgeText = document.getElementById('badgeText');
+const pctValue = document.getElementById('pctValue');
+const gaugeFill = document.getElementById('gaugeFill');
+const gaugeThreshold = document.getElementById('gaugeThreshold');
+const thresholdText = document.getElementById('thresholdText');
+const usoPrevisto = document.getElementById('usoPrevisto');
+const notaPorcentaje = document.getElementById('notaPorcentaje');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorBox.hidden = true;
+
+  const payload = {
+    "Edad": Number(document.getElementById('edad').value),
+    "Falla cardiaca": toggles.fallaCardiaca,
+    "Enfermedad renal": document.getElementById('renal').value,
+    "Tipo de endocarditis": document.getElementById('tipo').value,
+    "Staphylococcus aureus": document.getElementById('staph').value,
+    "Neutrofilos": Number(document.getElementById('neutrofilos').value),
+    "Creatinina": Number(document.getElementById('creatinina').value),
+    "Plaquetas": Number(document.getElementById('plaquetas').value),
+    "Hemoglobina": Number(document.getElementById('hemoglobina').value),
+    "Fiebre": toggles.fiebre,
+    "Sintomas neurologicos": toggles.sintomasNeuro,
+    "Aneurisma micotico": toggles.aneurisma
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Calculando...";
+  submitNote.textContent = "Consultando el pipeline entrenado en vivo (si la API estaba dormida, puede tardar ~50s)...";
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error("HTTP " + res.status + (text ? (" - " + text) : ""));
+    }
+    const data = await res.json();
+
+    const pct = Number(data.puntuacion_riesgo_pct);
+    const isHigh = data.categoria && data.categoria.toLowerCase().includes("elevado") && !data.categoria.toLowerCase().includes("no elevado");
+    const umbralPct = Number(data.umbral_riesgo_elevado) * 100;
+
+    badge.className = "badge " + (isHigh ? "high" : "low");
+    badgeText.textContent = data.categoria;
+    pctValue.textContent = pct.toFixed(1);
+    gaugeFill.className = "gauge-fill " + (isHigh ? "high" : "low");
+    gaugeFill.style.width = Math.min(Math.max(pct, 0), 100) + "%";
+    gaugeThreshold.style.left = Math.min(Math.max(umbralPct, 0), 100) + "%";
+    thresholdText.textContent = umbralPct.toFixed(1) + "%";
+    usoPrevisto.textContent = data.uso_previsto;
+    notaPorcentaje.textContent = data.nota_porcentaje;
+
+    resultEmpty.hidden = true;
+    resultBody.hidden = false;
+  } catch (err) {
+    errorBox.textContent = "No se pudo obtener el resultado del modelo (" + err.message + "). Si la API estaba inactiva, intente de nuevo en unos segundos.";
+    errorBox.hidden = false;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Calcular riesgo exploratorio";
+    submitNote.textContent = "La API gratuita puede tardar ~50s en despertar si estuvo inactiva.";
+  }
+});
+</script>
+</body>
+</html>
