@@ -300,6 +300,62 @@ button.primary:focus-visible{outline:2px solid var(--focus); outline-offset:2px;
   color:var(--muted);
   line-height:1.6;
 }
+
+.methodology{
+  margin-top:24px;
+  padding:24px;
+}
+.methodology h2{font-size:16px; font-weight:600; margin-bottom:4px;}
+.methodology .kicker{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+  display:block;
+}
+.methodology p{font-size:13.5px; line-height:1.6; color:var(--ink); margin:0 0 14px 0; max-width:78ch;}
+.methodology p.muted-note{color:var(--muted); font-size:12.5px;}
+
+.metrics-grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:12px;
+  margin:18px 0;
+}
+@media (max-width:680px){
+  .metrics-grid{grid-template-columns:repeat(2, 1fr);}
+}
+.metric-tile{
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.metric-value{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:22px;
+  font-weight:600;
+  line-height:1;
+}
+.metric-label{font-size:11.5px; color:var(--muted); line-height:1.35;}
+
+.confidentiality-note{
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-left:3px solid var(--primary);
+  border-radius:8px;
+  padding:12px 14px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.55;
+  margin-top:16px;
+}
+.confidentiality-note strong{color:var(--ink);}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
 </head>
@@ -449,6 +505,58 @@ button.primary:focus-visible{outline:2px solid var(--focus); outline-offset:2px;
       <span class="dot"></span>
       <span id="apiStatusText">API: riesgo-endocarditis-api.onrender.com</span>
     </div>
+  </div>
+</div>
+
+<div class="card methodology">
+  <span class="kicker">Metodologia y desempeno</span>
+  <h2>De donde sale el modelo y que tan bien predice</h2>
+
+  <p><strong>Origen de los datos.</strong> Cohorte retrospectiva de 139 pacientes con diagnostico de endocarditis infecciosa, con 30 fallecimientos intrahospitalarios (21.6%). Los predictores corresponden unicamente a informacion disponible al ingreso o al momento del diagnostico (antecedentes, sintomas, signos y laboratorios iniciales), evitando variables posteriores (duracion de hospitalizacion, cirugia, UCI) que producirian fuga temporal y sobreestimarian el desempeno.</p>
+
+  <p><strong>Modelo.</strong> Regresion logistica con regularizacion Elastic Net (combinacion L1+L2) y ponderacion balanceada de clases, sobre 12 variables: edad, falla cardiaca, enfermedad renal, tipo de endocarditis, <em>Staphylococcus aureus</em>, neutrofilos, creatinina, plaquetas, hemoglobina, fiebre, sintomas neurologicos y aneurisma micotico.</p>
+
+  <p><strong>Validacion.</strong> Validacion cruzada anidada y estratificada (5 particiones externas, 4 internas para ajustar hiperparametros). Las metricas y el umbral operativo se calcularon sobre predicciones fuera de fold (out-of-fold), sin usar el conjunto de prueba para decidir el umbral — la evaluacion mas defendible dado el tamano de la cohorte.</p>
+
+  <div class="metrics-grid">
+    <div class="metric-tile">
+      <span class="metric-value">0.74</span>
+      <span class="metric-label">ROC-AUC</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.51</span>
+      <span class="metric-label">PR-AUC</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.70</span>
+      <span class="metric-label">Recall (sensibilidad) &middot; 21/30 muertes detectadas</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.40</span>
+      <span class="metric-label">Precision &middot; 32 falsos positivos</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.61</span>
+      <span class="metric-label">F2-score</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.20</span>
+      <span class="metric-label">Brier score</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">0.49</span>
+      <span class="metric-label">Umbral operativo (probabilidad)</span>
+    </div>
+    <div class="metric-tile">
+      <span class="metric-value">n=139</span>
+      <span class="metric-label">Cohorte &middot; 30 eventos (21.6%)</span>
+    </div>
+  </div>
+
+  <p class="muted-note">Con solo 30 eventos, estas metricas tienen incertidumbre alta y son exploratorias; el modelo aun no se ha validado en una cohorte externa. La curva de calibracion muestra que las probabilidades predichas tienden a superar la mortalidad observada (consistente con el ajuste balanceado de clases), por lo que la puntuacion mostrada arriba es un indicador de riesgo relativo, no una probabilidad absoluta calibrada de mortalidad.</p>
+
+  <div class="confidentiality-note">
+    <strong>Confidencialidad de los datos.</strong> La base de datos clinica original (identificacion de pacientes, institucion y registros individuales) no es publica y no se expone en esta interfaz ni en el modelo. Unicamente se publican aqui las metricas de desempeno agregadas del modelo, con fines academicos y de interpretacion (Taller 2, Analisis de Datos I).
   </div>
 </div>
 
